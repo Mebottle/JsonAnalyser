@@ -1,0 +1,4 @@
+[{"name":"xiaoming","age":18,"hobby":["pingpong","swimming"]},
+"test1",56,{"name":"xiaoli","age":23,"education":{"school":"Wuhan University",
+"major":"Software Engineering","course":["data structure","physics"],"GPA":3.7}},
+[{"name":"aaa",	"age":34},"test2"]]
