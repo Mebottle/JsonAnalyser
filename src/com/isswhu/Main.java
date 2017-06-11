@@ -5,24 +5,64 @@ public class Main
 
     public static void main(String[] args)
     {
-        String path = Main.class.getResource("/").toString();
-        LexAnalyser lexAnalyser = new LexAnalyser("/Users/mebottle/IdeaProjects/jsonResolver/test/b/true.json");
-
-        Parser parser = new Parser("/Users/mebottle/IdeaProjects/jsonResolver/test/e/test.pretty.json");
-        try
+        if(args[0].equals("-pretty"))
         {
-            parser.startAnalyse();
-//            Formatter formatter = new Formatter("/Users/mebottle/IdeaProjects/jsonResolver/test/e/test.json",
-//                    "/Users/mebottle/IdeaProjects/jsonResolver/test/e/test.pretty.json");
-//            formatter.startFormat();
-        }
-        catch (Exception e)
-        {
+            String inPath = args[1];
+            Parser parser = new Parser(inPath);
+            try
+            {
+                parser.startAnalyse();
+                String outPath = args[1].substring(0, args[1].length() - 5) + ".pretty.json";
+                Formatter formatter = new Formatter(inPath, outPath);
+                formatter.startFormat();
+            }
+            catch (Error error)
+            {
+
+            }
 
         }
-        Searcher searcher = new Searcher("/Users/mebottle/IdeaProjects/jsonResolver/test/e/test.json",
-                ".[4]/education/course[1]");
-        searcher.buildTree();
-        searcher.search();
+        else if(args[0].equals("-find"))
+        {
+            String inPath = args[1];
+            String searchPath = args[2];
+            Parser parser = new Parser(inPath);
+            try
+            {
+                parser.startAnalyse();
+                Searcher searcher = new Searcher(inPath, searchPath);
+                searcher.buildTree();
+                if(searcher.search())
+                {
+                    System.out.println("\nComplete Searching : Succeed!");
+                }
+                else
+                {
+                    System.out.println("Find: null");
+                    System.out.println("Complete Searching : Failed!");
+                }
+            }
+            catch (Error error)
+            {
+
+            }
+        }
+        else if(args.length == 1)
+        {
+            String inPath = args[0];
+            Parser parser = new Parser(inPath);
+            try
+            {
+                parser.startAnalyse();
+            }
+            catch (Error error)
+            {
+                System.out.println("Complete Analysis : Failed!");
+            }
+        }
+        else
+        {
+            System.out.println("Parameter error！");
+        }
     }
 }

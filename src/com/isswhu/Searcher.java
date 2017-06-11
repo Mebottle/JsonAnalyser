@@ -117,7 +117,8 @@ public class Searcher
                 if(curIdx == _pathWords.size() - 1)
                 {
                     // 搜索目标是数组，搜索成功
-                    ((ArrNode)node).show();
+                    System.out.print("Type<array>: ");
+                    ((ArrNode)node).print();
                     return true;
                 }
                 else
@@ -137,7 +138,8 @@ public class Searcher
                 if(curIdx == _pathWords.size() - 1)
                 {
                     // 搜索目标是对象，搜索成功
-                    ((ObjNode)node).show();
+                    System.out.print("Type<object>: ");
+                    ((ObjNode)node).print();
                     return true;
                 }
                 // 继续搜索对象
@@ -189,7 +191,8 @@ public class Searcher
                 if(curIdx == _pathWords.size() - 1)
                 {
                     // 搜索目标为当前对象，搜索成功
-                    ((ObjNode)node).show();
+                    System.out.print("Type<object>: ");
+                    ((ObjNode)node).print();
                     return true;
                 }
                 else
@@ -212,7 +215,8 @@ public class Searcher
                     if(curIdx == _pathWords.size() - 1)
                     {
                         // 搜索目标为当前数组，搜索成功
-                        ((ArrNode)node).show();
+                        System.out.print("Type<array>: ");
+                        ((ArrNode)node).print();
                         return true;
                     }
                     // 当前数组路径没有提供索引值，却不是路径最后一层
@@ -231,10 +235,6 @@ public class Searcher
     private void getToken()
     {
         _currToken = _lex.getToken();
-        if (_currToken.getType().equals("EOF"))
-        {
-            System.out.println("Complete Searching : Succeed!");
-        }
     }
 
     private void match(String type)
@@ -412,6 +412,8 @@ abstract class Node
     }
 
     public void addNode(Node node){};
+
+    public void print(){};
 }
 
 /**
@@ -467,7 +469,17 @@ class ObjNode extends Node
         _pairNodes.add((PairNode)node);
     }
 
-    public void show(){}
+    public void print()
+    {
+        System.out.print("{");
+        for(int i = 0; i < _pairNodes.size(); i++)
+        {
+            _pairNodes.get(i).print();
+            if(i != _pairNodes.size() - 1)
+                System.out.print(",");
+        }
+        System.out.print("}");
+    }
 }
 
 /**
@@ -497,7 +509,18 @@ class ArrNode extends Node
         return null;
     }
 
-    public void show(){}
+    public void print()
+    {
+        System.out.print("[");
+        for(int i = 0; i < _Nodes.size(); i++)
+        {
+            _Nodes.get(i).print();
+            if(i != _Nodes.size() - 1)
+                System.out.print(",");
+        }
+        System.out.print("]");
+    }
+
 }
 
 /**
@@ -528,6 +551,12 @@ class PairNode extends Node
     {
         return _value;
     }
+
+    public void print()
+    {
+        System.out.print("\"" + _key + "\"" + ":");
+        _value.print();
+    }
 }
 
 /**
@@ -545,16 +574,17 @@ class ValNode extends Node
         _contentType = contentType;
     }
 
-    public String get_content()
-    {
-        return _content;
-    }
-
-    public String get_contentType() { return _contentType; }
-
     public void show()
     {
-        System.out.println(_contentType + " : " + _content);
+        System.out.print("Type<" +  _contentType + ">" + ": " + _content);
+    }
+
+    public void print()
+    {
+        if(_contentType.equals("string"))
+            System.out.print("\"" + _content + "\"");
+        else
+            System.out.print(_content);
     }
 }
 
